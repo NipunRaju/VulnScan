@@ -4,8 +4,8 @@ def port_scan(host, ports):
     try:
         # Convert the list of ports to a comma-separated string
         ports_str = ','.join(map(str, ports))
-        # Use the full path to nmap executable
-        nmap_path = r"C:\Program Files (x86)\Nmap\nmap.exe"
+        # Use the Linux path to nmap executable
+        nmap_path = "/usr/bin/nmap"
         result = subprocess.run(
             [nmap_path, "-p", ports_str, host],
             capture_output=True,

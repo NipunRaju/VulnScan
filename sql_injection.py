@@ -4,7 +4,7 @@ import os
 def check_sql_injection(url):
     try:
         # Path to the sqlmap.py file
-        sqlmap_path = "C:/Users/nipun/Downloads/sqlmap/sqlmapproject-sqlmap-79aa315/sqlmap.py"
+        sqlmap_path = "sqlmap.py"
         
         # Check if sqlmap.py exists
         if not os.path.isfile(sqlmap_path):
