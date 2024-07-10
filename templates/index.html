@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulnScan App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+        .header h1 {
+            margin: 0;
+            color: red;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .output {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .output .section {
+            margin-bottom: 20px;
+        }
+        .output .section h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .output .section p {
+            margin: 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            overflow-y: auto;
+            max-height: 200px;
+            white-space: pre-wrap;
+        }
+        .output .section p.blue { color: blue; }
+        .output .section p.green { color: green; }
+        .output .section p.red { color: red; }
+        .output .section p.purple { color: purple; }
+        .output .section p.orange { color: orange; }
+        .output .section p.cyan { color: cyan; }
+        .output .section p.magenta { color: magenta; }
+        .output .section p.yellow { color: yellow; }
+        .output .section p.brown { color: brown; }
+        .output .section p.lime { color: lime; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VulnScan</h1>
+    </div>
+    <div class="container">
+        <form action="/scan" method="post">
+            <input type="text" name="url" placeholder="Enter the URL" style="width:95%; padding:10px; border-radius:5px; margin-bottom:10px;" required>
+            <br>
+            <text>select scan below:</text>
+            <br>
+            <select name="choice" style="width:100%; padding:10px; border-radius:5px; margin-bottom:10px;" required>
+                <option value="1">Open Ports Scan</option>
+                <option value="2">SQL Injection Vulnerability</option>
+                <option value="3">XSS Vulnerability</option>
+                <option value="4">Directory Traversal Vulnerability</option>
+                <option value="5">Security Headers Check</option>
+                <option value="6">Server Software Check</option>
+                <option value="7">Subdomain Enumeration</option>
+                <option value="8">Brute Force Directories</option>
+                <option value="9">SSL Certificate Information</option>
+                <option value="10">Weak Password Detection</option>
+                <option value="11">All Checks</option>
+            </select>
+            <br>
+            <button type="submit" style="margin-top:10px; padding:10px 20px; border:none; border-radius:5px; background-color:#333; color:white;">Submit</button>
+        </form>
+        <div class="output">
+            {% if output %}
+            <div class="section">
+                <h2>Output:</h2>
+                <div>{{ output|safe }}</div>
+            </div>
+            {% endif %}
+            {% if error %}
+            <div class="section">
+                <h2>Error:</h2>
+                <p class="red">{{ error }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
