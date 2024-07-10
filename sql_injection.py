@@ -11,7 +11,7 @@ def check_sql_injection(url):
             raise FileNotFoundError(f"sqlmap.py not found at {sqlmap_path}")
         
         # Construct the command to run sqlmap.py
-        command = ["python", sqlmap_path, "-u", url, "--batch", "--level=1", "--risk=1", "--dbs"]
+        command = ["python3", sqlmap_path, "-u", url, "--batch", "--level=1", "--risk=1", "--dbs"]
         
         # Run the command
         result = subprocess.run(
