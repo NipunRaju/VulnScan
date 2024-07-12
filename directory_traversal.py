@@ -35,12 +35,12 @@ def check_directory_traversal(url):
                     vulnerability_found = True
                     print(f"Vulnerable to Directory Traversal: {test_url}")
                     print(f"Response Length: {len(response_text)}")
-                    print(f"Response Content (First 500 chars): {response_text[:500]}")
+                    print(f"Response Content (First 50 chars): {response_text[:50]}")
                     break  # Stop checking other payloads once a vulnerability is found
                 else:
                     print(f"Not Vulnerable (Expected content not found): {test_url}")
                     print(f"Response Length: {len(response_text)}")
-                    print(f"Response Content (First 500 chars): {response_text[:500]}")
+                    print(f"Response Content (First 50 chars): {response_text[:50]}")
             elif response.status_code == 403:
                 print(f"Forbidden: {test_url}")
             elif response.status_code == 401:
